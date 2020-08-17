@@ -1,1 +1,14 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: 'create-drop'
+  datasource:
+#    url: jdbc:mysql://localhost:3306/food?createDatabaseIfNotExist=true&useUnicode=true&amp&useJDBCCompliantTimezoneShift=true&amp&useLegacyDatetimeCode=false&amp&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/list-app-db?serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
