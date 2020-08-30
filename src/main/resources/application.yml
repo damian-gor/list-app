@@ -1,9 +1,12 @@
 spring:
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
   datasource:
-#    url: jdbc:mysql://localhost:3306/food?createDatabaseIfNotExist=true&useUnicode=true&amp&useJDBCCompliantTimezoneShift=true&amp&useLegacyDatetimeCode=false&amp&serverTimezone=UTC
+#    initialization-mode: ALWAYS
     url: jdbc:mysql://localhost:3306/list-app-db?serverTimezone=UTC
     username: root
     password: root
@@ -12,3 +15,6 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
+list-app:
+  jwtSecret: secretKey
+  jwtExpirationMs: 86400000
