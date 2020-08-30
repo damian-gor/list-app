@@ -6,5 +6,5 @@ import java.io.Serializable;
 
 @Getter
 public enum ProductUnit implements Serializable {
-    SZT, G, KG, ML, L
+    SZT, G, KG, ML, L, OPK, ZGRZ
 }
