@@ -58,6 +58,21 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         }
 
     }
+
+    @Override
+    public List<ShoppingList> getShoppingListsByBuyerId(Long buyerId) {
+        return shoppingListRepository.findByBuyerId(buyerId);
+    }
+
+    @Override
+    public List<ShoppingList> getAllShoppingLists() {
+        return shoppingListRepository.findAll();
+    }
+
+    @Override
+    public void deleteShoppingList(Long shoppingListId) {
+        shoppingListRepository.deleteById(shoppingListId);
+    }
 }
 
 
