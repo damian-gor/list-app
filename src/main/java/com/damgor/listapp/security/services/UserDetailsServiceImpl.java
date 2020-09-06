@@ -1,5 +1,6 @@
 package com.damgor.listapp.security.services;
 
+import com.damgor.listapp.models.DTOs.UserDTO;
 import com.damgor.listapp.models.User;
 import com.damgor.listapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsServiceExt {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -30,4 +31,23 @@ public class UserDetailsServiceImpl implements UserDetailsServiceExt {
      return userDetails.getUsername();
     }
 
+    @Override
+    public UserDTO getUserDTO() {
+        User user = userRepository.findByUsername(getUserName())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + getUserName()));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getId());
+        userDTO.setUserName(user.getUsername());
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO getUserDTObyId(Long userId) {
+        User user = userRepository.findById(userId).
+                orElseThrow(() -> new UsernameNotFoundException("User Not Found with userId: " + userId));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getId());
+        userDTO.setUserName(user.getUsername());
+        return userDTO;
+    }
 }

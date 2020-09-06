@@ -1,7 +1,7 @@
 package com.damgor.listapp.controllers;
 
-import com.damgor.listapp.models.ProductItem;
-import com.damgor.listapp.models.ShoppingList;
+import com.damgor.listapp.models.DTOs.ProductItemDTO;
+import com.damgor.listapp.models.DTOs.ShoppingListDTO;
 import com.damgor.listapp.security.services.UserDetailsServiceExt;
 import com.damgor.listapp.services.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,23 @@ public class ShoppingListController {
     private UserDetailsServiceExt userDetailsService;
 
     @GetMapping
-    public List<ShoppingList> getAllShoppingLists(@RequestParam(required = false, name = "buyerId") Long buyerId) {
+    public List<ShoppingListDTO> getAllShoppingLists(@RequestParam(required = false, name = "buyerId") Long buyerId) {
         if (buyerId != null) return shoppingListService.getShoppingListsByBuyerId(buyerId);
         else return shoppingListService.getAllShoppingLists();
     }
 
+    @PostMapping
+    public ShoppingListDTO addShoppingList (@RequestBody ShoppingListDTO shoppingListDTO) {
+       return shoppingListService.addShoppingList(shoppingListDTO);
+    }
+
+    @PutMapping
+    public ShoppingListDTO updateShoppingList (@RequestBody ShoppingListDTO shoppingListDTO) {
+       return shoppingListService.updateShoppingList(shoppingListDTO);
+    }
+
     @GetMapping("/{shoppingListId}")
-    public ShoppingList getShoppingList(@PathVariable Long shoppingListId) {
+    public ShoppingListDTO getShoppingList(@PathVariable Long shoppingListId) {
         return shoppingListService.getShoppingList(shoppingListId);
     }
 
@@ -39,14 +49,14 @@ public class ShoppingListController {
 
     @PutMapping
     @RequestMapping("/addProductItemToList")
-    public ShoppingList addProductItemToShoppingList(@RequestBody ProductItem newProductItem,
+    public ShoppingListDTO addProductItemToShoppingList(@RequestBody ProductItemDTO newProductItemDTO,
                                                      @PathParam("shoppingListId") Long shoppingListId) {
-        return shoppingListService.addProductItemToShoppingList(newProductItem, shoppingListId);
+        return shoppingListService.addProductItemToShoppingList(newProductItemDTO, shoppingListId);
     }
 
     @PatchMapping
     @RequestMapping("/updateProductItemInList")
-    public ShoppingList updateProductItemInShoppingList(@RequestBody ProductItem updatedProductItem,
+    public ShoppingListDTO updateProductItemInShoppingList(@RequestBody ProductItemDTO updatedProductItem,
                                                         @PathParam("shoppingListId") Long shoppingListId) {
 
         return shoppingListService.updateProductItemInShoppingList(updatedProductItem, shoppingListId);
@@ -54,7 +64,7 @@ public class ShoppingListController {
 
     @PutMapping
     @RequestMapping("/removeProductItemFromList")
-    public HttpStatus removeProductItemFromList(@RequestBody ProductItem removedProductItem,
+    public HttpStatus removeProductItemFromList(@RequestBody ProductItemDTO removedProductItem,
                                                 @PathParam("shoppingListId") Long shoppingListId) {
         shoppingListService.removeProductItemFromList(removedProductItem, shoppingListId);
         return HttpStatus.OK;

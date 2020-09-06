@@ -1,17 +1,19 @@
 package com.damgor.listapp.services;
 
-import com.damgor.listapp.models.ProductItem;
-import com.damgor.listapp.models.ShoppingList;
+import com.damgor.listapp.models.DTOs.ProductItemDTO;
+import com.damgor.listapp.models.DTOs.ShoppingListDTO;
 
 import java.util.List;
 
 public interface ShoppingListService {
-    ShoppingList getShoppingList(Long id);
-    ShoppingList addProductItemToShoppingList(ProductItem newProductItem, Long shoppingListId);
-    ShoppingList updateProductItemInShoppingList (ProductItem updatedProductItem, Long shoppingListId);
-    void removeProductItemFromList (ProductItem removedProductItem, Long shoppingListId);
-    List<ShoppingList> getShoppingListsByBuyerId(Long buyerId);
-    List<ShoppingList> getAllShoppingLists();
+    ShoppingListDTO getShoppingList(Long id);
+    ShoppingListDTO addProductItemToShoppingList(ProductItemDTO newProductItemDTO, Long shoppingListId);
+    ShoppingListDTO updateProductItemInShoppingList (ProductItemDTO updatedProductItem, Long shoppingListId);
+    void removeProductItemFromList (ProductItemDTO removedProductItem, Long shoppingListId);
+    List<ShoppingListDTO> getShoppingListsByBuyerId(Long buyerId);
+    List<ShoppingListDTO> getAllShoppingLists();
     void deleteShoppingList (Long shoppingListId);
+    ShoppingListDTO addShoppingList(ShoppingListDTO shoppingListDTO);
+    ShoppingListDTO updateShoppingList(ShoppingListDTO shoppingListDTO);
 
 }
