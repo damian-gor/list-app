@@ -54,6 +54,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> filterProductsByName(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    @Override
     public Product addProduct(Product product) {
         checkIfTheSameExists(product);
         Product newProduct = new Product();
