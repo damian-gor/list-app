@@ -12,6 +12,7 @@ public interface ShoppingListService {
     void removeProductItemFromList (ProductItemDTO removedProductItem, Long shoppingListId);
     List<ShoppingListDTO> getShoppingListsByBuyerId(Long buyerId);
     List<ShoppingListDTO> getAllShoppingLists();
+    List<ShoppingListDTO> getUserShoppingLists();
     void deleteShoppingList (Long shoppingListId);
     ShoppingListDTO addShoppingList(ShoppingListDTO shoppingListDTO);
     ShoppingListDTO updateShoppingList(ShoppingListDTO shoppingListDTO);

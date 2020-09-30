@@ -15,4 +15,5 @@ public class ShoppingListDTO {
     private List<ProductItemDTO> productsList;
     private List<UserDTO> participantsList;
     private String shopName;
+    private String shopPromotionUrl;
 }

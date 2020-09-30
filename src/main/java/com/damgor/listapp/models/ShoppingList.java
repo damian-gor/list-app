@@ -21,16 +21,28 @@ public class ShoppingList implements Serializable {
     @ElementCollection
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<ProductItem> productsList;
-    @ElementCollection
-    private List<Long> participantsIdsList;
-    //    ToDo zrobic z tego obiekt sklepu
-    private String shopName;
-//    ToDo data zakupow
 
-    public ShoppingList(Long buyerId, List<ProductItem> productsList, List<Long> participantsIdsList, String shopName) {
+    @ManyToMany
+    private List<User> participantsList;
+
+    @OneToOne
+    private Shop shop;
+
+    public ShoppingList(Long buyerId, List<ProductItem> productsList, Shop shop, List<User> participantsList) {
         this.buyerId = buyerId;
         this.productsList = productsList;
-        this.participantsIdsList = participantsIdsList;
-        this.shopName = shopName;
+        this.participantsList = participantsList;
+        this.shop = shop;
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingList{" +
+                "id=" + id +
+                ", buyerId=" + buyerId +
+                ", productsList=" + productsList +
+                ", participantsList=" + "" +
+                ", shop=" + shop +
+                '}';
     }
 }

@@ -1,21 +1,15 @@
 package com.damgor.listapp.db;
 
-import com.damgor.listapp.models.Product;
-import com.damgor.listapp.models.ProductItem;
-import com.damgor.listapp.models.ShoppingList;
+import com.damgor.listapp.models.*;
 import com.damgor.listapp.models.enums.ProductCategory;
 import com.damgor.listapp.models.enums.ProductStatus;
 import com.damgor.listapp.models.enums.ProductUnit;
-import com.damgor.listapp.repositories.ProductItemRepository;
-import com.damgor.listapp.repositories.ProductRepository;
-import com.damgor.listapp.repositories.ShoppingListRepository;
+import com.damgor.listapp.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class Initializer implements CommandLineRunner {
@@ -26,6 +20,10 @@ public class Initializer implements CommandLineRunner {
     private ProductItemRepository productItemRepository;
     @Autowired
     private ShoppingListRepository shoppingListRepository;
+    @Autowired
+    private ShopRepository shopRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -56,7 +54,19 @@ public class Initializer implements CommandLineRunner {
 
             productItems = productItemRepository.saveAll(productItems);
 
-            ShoppingList shoppingList = new ShoppingList(1L, productItems, null, "Biedronka");
+            Shop shop1 = new Shop(1L, "Biedronka", "biedronka.pl");
+            Shop shop2 = new Shop(2L, "Lidl", "lidl.pl");
+            Shop shop3 = new Shop(3L, "Auchan", "auchan.pl");
+            shopRepository.saveAll(Arrays.asList(shop1,shop2,shop3));
+
+            userRepository.saveAll(Arrays.asList(
+               new User("Damian","damian.gorka94@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2"),
+               new User("Daria","daria@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2"),
+               new User("Ania","ania@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2")
+            ));
+
+
+            ShoppingList shoppingList = new ShoppingList(1L, productItems, shop1, new ArrayList<>(Arrays.asList((userRepository.getOne(2L)),userRepository.getOne(3L))));
             shoppingListRepository.save(shoppingList);
         }
     }

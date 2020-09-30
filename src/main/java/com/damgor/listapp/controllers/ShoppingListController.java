@@ -26,6 +26,11 @@ public class ShoppingListController {
         else return shoppingListService.getAllShoppingLists();
     }
 
+    @GetMapping("/userShoppingLists")
+    public List<ShoppingListDTO> getUserShoppingLists() {
+        return shoppingListService.getUserShoppingLists();
+    }
+
     @PostMapping
     public ShoppingListDTO addShoppingList (@RequestBody ShoppingListDTO shoppingListDTO) {
        return shoppingListService.addShoppingList(shoppingListDTO);
