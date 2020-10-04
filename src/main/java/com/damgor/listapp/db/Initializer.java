@@ -54,17 +54,10 @@ public class Initializer implements CommandLineRunner {
 
             productItems = productItemRepository.saveAll(productItems);
 
-            Shop shop1 = new Shop(1L, "Biedronka", "biedronka.pl");
-            Shop shop2 = new Shop(2L, "Lidl", "lidl.pl");
-            Shop shop3 = new Shop(3L, "Auchan", "auchan.pl");
+            Shop shop1 = new Shop(1L, "Biedronka", "https://www.biedronka.pl/pl/gazetki");
+            Shop shop2 = new Shop(2L, "Lidl", "https://www.lidl.pl/informacje-dla-klienta/nasze-gazetki");
+            Shop shop3 = new Shop(3L, "Auchan", "https://www.auchan.pl/pl/gazetki");
             shopRepository.saveAll(Arrays.asList(shop1,shop2,shop3));
-
-            userRepository.saveAll(Arrays.asList(
-               new User("Damian","damian.gorka94@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2"),
-               new User("Daria","daria@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2"),
-               new User("Ania","ania@gmail.com","$2a$10$/LONzloFszZa7d19s2vcAOA.dkiU5qbjqmaUFJCxgQMJ.0VnqFtk2")
-            ));
-
 
             ShoppingList shoppingList = new ShoppingList(1L, productItems, shop1, new ArrayList<>(Arrays.asList((userRepository.getOne(2L)),userRepository.getOne(3L))));
             shoppingListRepository.save(shoppingList);

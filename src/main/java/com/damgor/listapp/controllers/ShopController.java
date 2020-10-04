@@ -21,6 +21,11 @@ public class ShopController {
         return shopService.getAllShops();
     }
 
+    @GetMapping("/{shopId}")
+    public Shop getShop (@PathVariable("shopId") Long shopId) {
+        return shopService.getShop(shopId);
+    }
+
     @PostMapping
     public Shop addShop (@RequestBody Shop shop) {
         return shopService.addShop(shop);
@@ -32,8 +37,13 @@ public class ShopController {
     }
 
     @DeleteMapping("/{shopId}")
-    public HttpStatus removeShop (@PathParam("shopId") Long shopId) {
+    public HttpStatus removeShop (@PathVariable("shopId") Long shopId) {
         shopService.removeShop(shopId);
         return HttpStatus.OK;
+    }
+
+    @GetMapping("/filterByName")
+    public List<Shop> filterShopsByName (@PathParam("shopName") String shopName) {
+        return shopService.filterShopsByName(shopName);
     }
 }

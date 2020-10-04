@@ -18,3 +18,13 @@ spring:
 list-app:
   jwtSecret: secretKey
   jwtExpirationMs: 86400000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG

@@ -7,46 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    ProductRepository productRepository;
-
-//    @Override
-//    public List<ProductDTO> getAllProducts() {
-//        List<Product> products = productRepository.findAll();
-//
-//        List<ProductDTO> productDTOList = new ArrayList<>();
-//        products.forEach(p -> {
-//            ProductDTO productDTO = new ProductDTO();
-//            productDTO.setId(p.getId());
-//            productDTO.setProductName(p.getName());
-//            productDTOList.add(productDTO);
-//        });
-//
-//        return productDTOList;
-//    }
-//
-//    @Override
-//    public ShoppingListDTO getAllProducts() {
-//        List<Product> products = productRepository.findAll();
-//
-//        List<ProductDTO> productDTOList = new ArrayList<>();
-//        products.forEach(p -> {
-//            ProductDTO productDTO = new ProductDTO();
-//            productDTO.setId(p.getId());
-//            productDTO.setProductName(p.getName());
-//            productDTOList.add(productDTO);
-//        });
-//
-//        ShoppingListDTO shoppingListDTO = new ShoppingListDTO();
-//        shoppingListDTO.setProductsList(productDTOList);
-//
-//        return shoppingListDTO;
-//    }
+    private ProductRepository productRepository;
 
     @Override
     public List<Product> getAllProducts() {
@@ -69,13 +37,30 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(newProduct);
     }
 
+    @Override
+    public Product updateProduct(Product product) {
+        Product updatedProduct =
+                productRepository
+                        .findById(product.getId())
+                        .orElseThrow(
+                                () -> new EntityNotFoundException("Product with ID " + product.getId() + " not found."));
+        updatedProduct.setName(product.getName());
+        updatedProduct.setCategory(product.getCategory());
+        updatedProduct.setUnit(product.getUnit());
+        return productRepository.save(updatedProduct);
+    }
+
+    @Override
+    public void removeProduct(Long productId) {
+        productRepository.deleteById(productId);
+    }
+
     void checkIfTheSameExists(Product product) {
         if (productRepository.findOneByNameAndCategory(product.getName(), product.getCategory()).isPresent())
             throw new EntityExistsException(
                     "Product with name: \"" + product.getName() + "\" and category: \"" + product.getCategory() +
                             "\" already exists!");
     }
-
 
 }
 

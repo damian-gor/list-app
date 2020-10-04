@@ -2,7 +2,6 @@ package com.damgor.listapp.controllers;
 
 import com.damgor.listapp.models.DTOs.ProductItemDTO;
 import com.damgor.listapp.models.DTOs.ShoppingListDTO;
-import com.damgor.listapp.security.services.UserDetailsServiceExt;
 import com.damgor.listapp.services.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +16,6 @@ public class ShoppingListController {
 
     @Autowired
     private ShoppingListService shoppingListService;
-    @Autowired
-    private UserDetailsServiceExt userDetailsService;
 
     @GetMapping
     public List<ShoppingListDTO> getAllShoppingLists(@RequestParam(required = false, name = "buyerId") Long buyerId) {
@@ -63,7 +60,6 @@ public class ShoppingListController {
     @RequestMapping("/updateProductItemInList")
     public ShoppingListDTO updateProductItemInShoppingList(@RequestBody ProductItemDTO updatedProductItem,
                                                         @PathParam("shoppingListId") Long shoppingListId) {
-
         return shoppingListService.updateProductItemInShoppingList(updatedProductItem, shoppingListId);
     }
 

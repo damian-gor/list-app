@@ -6,6 +6,7 @@ import com.damgor.listapp.services.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,14 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public List<Shop> getAllShops() {
         return shopRepository.findAll();
+    }
+
+    @Override
+    public Shop getShop(Long shopId) {
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Shop with ID " + shopId + " not found."));
+        return shop;
     }
 
     @Override
@@ -44,6 +53,17 @@ public class ShopServiceImpl implements ShopService {
             shop.setName(shopName);
             return shopRepository.save(shop);
         }
+    }
+
+    @Override
+    public List<Shop> filterShopsByName(String shopName) {
+        return shopRepository.findByNameContainingIgnoreCase(shopName);
+    }
+
+    @Override
+    public Shop addShopIfNotExists(Shop shopToVerify) {
+        Optional <Shop> optionalShop = shopRepository.findByNameIgnoreCase(shopToVerify.getName());
+        return optionalShop.orElseGet(() -> addShop(shopToVerify));
     }
 
 }

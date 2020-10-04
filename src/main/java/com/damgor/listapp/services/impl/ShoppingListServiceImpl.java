@@ -3,8 +3,8 @@ package com.damgor.listapp.services.impl;
 import com.damgor.listapp.models.DTOs.ProductItemDTO;
 import com.damgor.listapp.models.DTOs.ShoppingListDTO;
 import com.damgor.listapp.models.ProductItem;
+import com.damgor.listapp.models.Shop;
 import com.damgor.listapp.models.ShoppingList;
-import com.damgor.listapp.repositories.ShopRepository;
 import com.damgor.listapp.repositories.ShoppingListRepository;
 import com.damgor.listapp.security.services.UserDetailsServiceExt;
 import com.damgor.listapp.services.ProductItemService;
@@ -22,114 +22,120 @@ import java.util.Optional;
 @Service
 public class ShoppingListServiceImpl implements ShoppingListService {
 
-  @Autowired private ShoppingListRepository shoppingListRepository;
-  @Autowired private ShopRepository shopRepository;
-  @Autowired private ProductItemService productItemService;
-  @Autowired private ShopService shopService;
-  @Autowired private UserDetailsServiceExt userDetailsService;
-  @Autowired private MapperService mapperService;
+    @Autowired
+    private ShoppingListRepository shoppingListRepository;
+    @Autowired
+    private ProductItemService productItemService;
+    @Autowired
+    private ShopService shopService;
+    @Autowired
+    private UserDetailsServiceExt userDetailsService;
+    @Autowired
+    private MapperService mapperService;
 
-  @Override
-  public ShoppingListDTO getShoppingList(Long id) {
-    return mapperService.shoppingListToDTO(shoppingListRepository.getOne(id));
-  }
-
-  @Override
-  public ShoppingListDTO addProductItemToShoppingList(
-      ProductItemDTO newProductItemDTO, Long shoppingListId) {
-    Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
-    if (optionalShoppingList.isPresent()) {
-      ShoppingList updatedShoppingList = optionalShoppingList.get();
-      List<ProductItem> updatedProductsList = updatedShoppingList.getProductsList();
-      updatedProductsList.add(productItemService.addProductItem(newProductItemDTO));
-      updatedShoppingList.setProductsList(updatedProductsList);
-      updatedShoppingList = shoppingListRepository.save(updatedShoppingList);
-      ShoppingListDTO updatedShoppingListDTO = mapperService.shoppingListToDTO(updatedShoppingList);
-      return updatedShoppingListDTO;
-    } else
-      throw new EntityExistsException(
-          "ShoppingList with id: " + shoppingListId + " doesn't exist!");
-  }
-
-  @Override
-  public ShoppingListDTO updateProductItemInShoppingList(
-      ProductItemDTO updatedProductItem, Long shoppingListId) {
-    Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
-    if (optionalShoppingList.isPresent()) {
-      productItemService.updateProductItem(mapperService.productItemToEntity(updatedProductItem));
-      return mapperService.shoppingListToDTO(optionalShoppingList.get());
-    } else
-      throw new EntityExistsException(
-          "ShoppingList with id: " + shoppingListId + " doesn't exist!");
-  }
-
-  @Override
-  public void removeProductItemFromList(ProductItemDTO removedProductItem, Long shoppingListId) {
-    Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
-    if (optionalShoppingList.isPresent()) {
-      ShoppingList updatedShoppingList = optionalShoppingList.get();
-      List<ProductItem> updatedProductsList = updatedShoppingList.getProductsList();
-      updatedProductsList.remove(mapperService.productItemToEntity(removedProductItem));
-      updatedShoppingList.setProductsList(updatedProductsList);
-      shoppingListRepository.save(updatedShoppingList);
-      productItemService.removeProductItem(removedProductItem.getId());
+    @Override
+    public ShoppingListDTO getShoppingList(Long id) {
+        return mapperService.shoppingListToDTO(shoppingListRepository.getOne(id));
     }
-  }
 
-  @Override
-  public List<ShoppingListDTO> getShoppingListsByBuyerId(Long buyerId) {
-    return mapperService.shoppingListToDTO(shoppingListRepository.findByBuyerId(buyerId));
-  }
+    @Override
+    public ShoppingListDTO addProductItemToShoppingList(
+            ProductItemDTO newProductItemDTO, Long shoppingListId) {
+        Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
+        if (optionalShoppingList.isPresent()) {
+            ShoppingList updatedShoppingList = optionalShoppingList.get();
+            List<ProductItem> updatedProductsList = updatedShoppingList.getProductsList();
+            updatedProductsList.add(productItemService.addProductItem(newProductItemDTO));
+            updatedShoppingList.setProductsList(updatedProductsList);
+            updatedShoppingList = shoppingListRepository.save(updatedShoppingList);
+            ShoppingListDTO updatedShoppingListDTO = mapperService.shoppingListToDTO(updatedShoppingList);
+            return updatedShoppingListDTO;
+        } else
+            throw new EntityExistsException(
+                    "ShoppingList with id: " + shoppingListId + " doesn't exist!");
+    }
 
-  @Override
-  public List<ShoppingListDTO> getAllShoppingLists() {
-    return mapperService.shoppingListToDTO(shoppingListRepository.findAll());
-  }
+    @Override
+    public ShoppingListDTO updateProductItemInShoppingList(
+            ProductItemDTO updatedProductItem, Long shoppingListId) {
+        Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
+        if (optionalShoppingList.isPresent()) {
+            productItemService.updateProductItem(mapperService.productItemToEntity(updatedProductItem));
+            return mapperService.shoppingListToDTO(optionalShoppingList.get());
+        } else
+            throw new EntityExistsException(
+                    "ShoppingList with id: " + shoppingListId + " doesn't exist!");
+    }
+
+    @Override
+    public void removeProductItemFromList(ProductItemDTO removedProductItem, Long shoppingListId) {
+        Optional<ShoppingList> optionalShoppingList = shoppingListRepository.findById(shoppingListId);
+        if (optionalShoppingList.isPresent()) {
+            ShoppingList updatedShoppingList = optionalShoppingList.get();
+            List<ProductItem> updatedProductsList = updatedShoppingList.getProductsList();
+            updatedProductsList.remove(mapperService.productItemToEntity(removedProductItem));
+            updatedShoppingList.setProductsList(updatedProductsList);
+            shoppingListRepository.save(updatedShoppingList);
+            productItemService.removeProductItem(removedProductItem.getId());
+        }
+    }
+
+    @Override
+    public List<ShoppingListDTO> getShoppingListsByBuyerId(Long buyerId) {
+        return mapperService.shoppingListToDTO(shoppingListRepository.findByBuyerId(buyerId));
+    }
+
+    @Override
+    public List<ShoppingListDTO> getAllShoppingLists() {
+        return mapperService.shoppingListToDTO(shoppingListRepository.findAll());
+    }
 
 
-  @Override
-  public List<ShoppingListDTO> getUserShoppingLists() {
-    List<ShoppingList> userShoppingLists = new ArrayList<>();
-    Long loggedUserId = userDetailsService.getUserDTO().getUserId();
-    shoppingListRepository.findAll().forEach(shoppingList -> {
-      if (shoppingList.getBuyerId() == loggedUserId) {
-        userShoppingLists.add(shoppingList);
-      } else {
-        List<Long> participantsIds = new ArrayList<>();
-        shoppingList.getParticipantsList().forEach( participant -> {
-          participantsIds.add(participant.getId());
+    @Override
+    public List<ShoppingListDTO> getUserShoppingLists() {
+        List<ShoppingList> userShoppingLists = new ArrayList<>();
+        Long loggedUserId = userDetailsService.getUserDTO().getUserId();
+        shoppingListRepository.findAll().forEach(shoppingList -> {
+            if (shoppingList.getBuyerId() == loggedUserId) {
+                userShoppingLists.add(shoppingList);
+            } else {
+                List<Long> participantsIds = new ArrayList<>();
+                shoppingList.getParticipantsList().forEach(participant -> {
+                    participantsIds.add(participant.getId());
+                });
+                if (participantsIds.contains(loggedUserId)) userShoppingLists.add(shoppingList);
+            }
         });
-        if (participantsIds.contains(loggedUserId)) userShoppingLists.add(shoppingList);
-      }
-    });
-    return mapperService.shoppingListToDTO(userShoppingLists);
-  }
+        return mapperService.shoppingListToDTO(userShoppingLists);
+    }
 
-  @Override
-  public void deleteShoppingList(Long shoppingListId) {
-    shoppingListRepository.deleteById(shoppingListId);
-  }
+    @Override
+    public void deleteShoppingList(Long shoppingListId) {
+        shoppingListRepository.deleteById(shoppingListId);
+    }
 
-  @Override
-  public ShoppingListDTO addShoppingList(ShoppingListDTO shoppingListDTO) {
-    ShoppingList newShoppingList = new ShoppingList();
-    newShoppingList.setBuyerId(userDetailsService.getUserDTO().getUserId());
-      newShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
+    @Override
+    public ShoppingListDTO addShoppingList(ShoppingListDTO shoppingListDTO) {
+        ShoppingList newShoppingList = new ShoppingList();
+        newShoppingList.setBuyerId(userDetailsService.getUserDTO().getUserId());
+        newShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
+        Shop shopToVerify = new Shop(shoppingListDTO.getShopName(), shoppingListDTO.getShopPromotionUrl());
+        newShoppingList.setShop(shopService.addShopIfNotExists(shopToVerify));
 
-    return mapperService.shoppingListToDTO(shoppingListRepository.save(newShoppingList));
-  }
+        return mapperService.shoppingListToDTO(shoppingListRepository.save(newShoppingList));
+    }
 
-  @Override
-  public ShoppingListDTO updateShoppingList(ShoppingListDTO shoppingListDTO) {
-    Optional<ShoppingList> optionalShoppingList =
-        shoppingListRepository.findById(shoppingListDTO.getId());
-    if (optionalShoppingList.isPresent()) {
-      ShoppingList updatedShoppingList = optionalShoppingList.get();
-      updatedShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
-      return mapperService.shoppingListToDTO(shoppingListRepository.save(updatedShoppingList));
-    } else
-      throw new EntityExistsException(
-          "ShoppingList with id: " + shoppingListDTO.getId() + " doesn't exist!");
-  }
+    @Override
+    public ShoppingListDTO updateShoppingList(ShoppingListDTO shoppingListDTO) {
+        Optional<ShoppingList> optionalShoppingList =
+                shoppingListRepository.findById(shoppingListDTO.getId());
+        if (optionalShoppingList.isPresent()) {
+            ShoppingList updatedShoppingList = optionalShoppingList.get();
+            updatedShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
+            return mapperService.shoppingListToDTO(shoppingListRepository.save(updatedShoppingList));
+        } else
+            throw new EntityExistsException(
+                    "ShoppingList with id: " + shoppingListDTO.getId() + " doesn't exist!");
+    }
 
 }

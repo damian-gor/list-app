@@ -1,9 +1,9 @@
 package com.damgor.listapp.controllers;
 
 import com.damgor.listapp.models.Product;
-import com.damgor.listapp.security.services.UserDetailsServiceExt;
 import com.damgor.listapp.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -15,8 +15,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private UserDetailsServiceExt userDetailsService;
 
     @GetMapping
     public List<Product> getAllProducts () {
@@ -31,5 +29,16 @@ public class ProductController {
     @PostMapping
     public Product addProduct (@RequestBody Product product) {
         return productService.addProduct(product);
+    }
+
+    @PutMapping
+    public Product updateProduct (@RequestBody Product product) {
+        return productService.updateProduct(product);
+    }
+
+    @DeleteMapping("/{productId}")
+    public HttpStatus removeProduct (@PathVariable("productId") Long productId) {
+        productService.removeProduct(productId);
+        return HttpStatus.OK;
     }
 }

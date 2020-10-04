@@ -46,7 +46,6 @@ public class MapperServiceImpl implements MapperService {
                         .stream()
                         .map(this::productItemToDto)
                         .collect(Collectors.toList()));
-            // ToDo Shop + Participants
             shoppingListDTOList.add(shoppingListDTO);
         });
         return shoppingListDTOList;

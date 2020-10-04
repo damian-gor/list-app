@@ -22,4 +22,8 @@ public class Shop implements Serializable {
     private String name;
     private String promotionUrl;
 
+    public Shop(String name, String promotionUrl) {
+        this.name = name;
+        this.promotionUrl = promotionUrl;
+    }
 }
