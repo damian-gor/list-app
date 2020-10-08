@@ -29,18 +29,18 @@ public class Initializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (!productRepository.findById(10L).isPresent()) {
             productRepository.saveAll(Arrays.asList(
-                    new Product("Ogórki", ProductCategory.WARZYWA_OWOCE_SWIEZE),
-                    new Product("Banany", ProductCategory.WARZYWA_OWOCE_SWIEZE),
-                    new Product("Szpinak", ProductCategory.WARZYWA_OWOCE_PAKOWANE),
-                    new Product("Truskawki", ProductCategory.MROZONKI),
-                    new Product("Piwo", ProductCategory.ALKOHOL),
-                    new Product("Kurczak pierś", ProductCategory.MIESO),
-                    new Product("Mleko 2%", ProductCategory.NABIAL),
-                    new Product("Nerkowiec", ProductCategory.ORZECHY_NASIONA),
-                    new Product("Gumy Orbit zielone", ProductCategory.INNE),
-                    new Product("Mąka żytnia", ProductCategory.PRODUKTY_ZBOZOWE),
-                    new Product("Czekolada gorzka 64%", ProductCategory.SLODYCZE),
-                    new Product("Pieluszki Dada 4+", ProductCategory.HIGIENA))
+                    new Product("Ogórki", ProductCategory.WARZYWA_OWOCE_SWIEZE, ProductUnit.SZT),
+                    new Product("Banany", ProductCategory.WARZYWA_OWOCE_SWIEZE, ProductUnit.SZT),
+                    new Product("Szpinak", ProductCategory.WARZYWA_OWOCE_PAKOWANE, ProductUnit.OPK),
+                    new Product("Truskawki", ProductCategory.MROZONKI, ProductUnit.KG),
+                    new Product("Piwo", ProductCategory.ALKOHOL, ProductUnit.SZT),
+                    new Product("Kurczak pierś", ProductCategory.MIESO, ProductUnit.KG),
+                    new Product("Mleko 2%", ProductCategory.NABIAL, ProductUnit.L),
+                    new Product("Nerkowiec", ProductCategory.ORZECHY_NASIONA, ProductUnit.G),
+                    new Product("Gumy Orbit zielone", ProductCategory.INNE, ProductUnit.OPK),
+                    new Product("Mąka żytnia", ProductCategory.PRODUKTY_ZBOZOWE, ProductUnit.KG),
+                    new Product("Czekolada gorzka 64%", ProductCategory.SLODYCZE, ProductUnit.SZT),
+                    new Product("Pieluszki Dada 4+", ProductCategory.HIGIENA, ProductUnit.OPK))
             );
         }
         if (!shoppingListRepository.findById(1L).isPresent()) {

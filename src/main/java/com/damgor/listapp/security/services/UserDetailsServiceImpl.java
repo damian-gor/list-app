@@ -124,7 +124,8 @@ public class UserDetailsServiceImpl implements UserDetailsServiceExt {
 
   }
 
-  private Set<User> userDTOsListToUsersSet (List<UserDTO> usersDTOsList){
+  @Override
+  public Set<User> userDTOsListToUsersSet (List<UserDTO> usersDTOsList){
     List<Long> ids = new ArrayList<>();
     usersDTOsList.forEach(userDTO -> ids.add(userDTO.getUserId()));
 
@@ -133,6 +134,10 @@ public class UserDetailsServiceImpl implements UserDetailsServiceExt {
     return usersSet;
   }
 
+  @Override
+  public User  getUserById(Long userId) {
+    return userRepository.getOne(userId);
+  }
 
 }
 

@@ -3,6 +3,8 @@ package com.damgor.listapp.services.impl;
 import com.damgor.listapp.models.Product;
 import com.damgor.listapp.repositories.ProductRepository;
 import com.damgor.listapp.services.ProductService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    private final Counter getAllProductsCounter;
+
+    public ProductServiceImpl(MeterRegistry registry) {
+        this.getAllProductsCounter = registry.counter("services.product-service.get-all-products");
+    }
 
     @Override
     public List<Product> getAllProducts() {
+        getAllProductsCounter.increment();
         return productRepository.findAll();
     }
 

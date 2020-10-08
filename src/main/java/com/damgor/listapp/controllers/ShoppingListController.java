@@ -20,7 +20,7 @@ public class ShoppingListController {
     @GetMapping
     public List<ShoppingListDTO> getAllShoppingLists(@RequestParam(required = false, name = "buyerId") Long buyerId) {
         if (buyerId != null) return shoppingListService.getShoppingListsByBuyerId(buyerId);
-        else return shoppingListService.getAllShoppingLists();
+        else return shoppingListService.getAllShoppingListsConnectedWithUser();
     }
 
     @GetMapping("/userShoppingLists")

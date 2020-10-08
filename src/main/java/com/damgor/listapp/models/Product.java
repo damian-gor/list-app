@@ -28,4 +28,10 @@ public class Product implements Serializable {
         this.name = name;
         this.category = category;
     }
+
+    public Product(String name, ProductCategory category, ProductUnit unit) {
+        this.name = name;
+        this.category = category;
+        this.unit = unit;
+    }
 }

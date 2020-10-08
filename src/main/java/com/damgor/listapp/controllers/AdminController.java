@@ -12,7 +12,7 @@ public class AdminController {
 
     @GetMapping
     public String adminPanelMessage() {
-        return "Welcome in Admin Panel";
+        return "Witaj w panelu administracyjnym!";
     }
 
 }

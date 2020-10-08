@@ -25,7 +25,9 @@ public class ShoppingList implements Serializable {
     @ManyToMany
     private List<User> participantsList;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "SHOP_ID", referencedColumnName = "ID")
+    @JsonIgnoreProperties("shoppingLists")
     private Shop shop;
 
     public ShoppingList(Long buyerId, List<ProductItem> productsList, Shop shop, List<User> participantsList) {

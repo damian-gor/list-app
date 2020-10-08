@@ -5,6 +5,7 @@ import com.damgor.listapp.models.DTOs.ShoppingListDTO;
 import com.damgor.listapp.models.ProductItem;
 import com.damgor.listapp.models.Shop;
 import com.damgor.listapp.models.ShoppingList;
+import com.damgor.listapp.models.User;
 import com.damgor.listapp.repositories.ShoppingListRepository;
 import com.damgor.listapp.security.services.UserDetailsServiceExt;
 import com.damgor.listapp.services.ProductItemService;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ShoppingListServiceImpl implements ShoppingListService {
@@ -90,6 +89,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         return mapperService.shoppingListToDTO(shoppingListRepository.findAll());
     }
 
+    @Override
+    public List<ShoppingListDTO> getAllShoppingListsConnectedWithUser() {
+        Long loggedUserId = userDetailsService.getUserDTO().getUserId();
+        User user = userDetailsService.getUserById(loggedUserId);
+        List<ShoppingList> usersShoppingLists2 = shoppingListRepository.findByParticipantsListIsContainingOrBuyerId(user, loggedUserId);
+        return mapperService.shoppingListToDTO(usersShoppingLists2);
+    }
+
 
     @Override
     public List<ShoppingListDTO> getUserShoppingLists() {
@@ -119,6 +126,11 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         ShoppingList newShoppingList = new ShoppingList();
         newShoppingList.setBuyerId(userDetailsService.getUserDTO().getUserId());
         newShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
+        if (!shoppingListDTO.getParticipantsList().isEmpty()) {
+        List<User> participantsEntities =
+                new ArrayList<>(userDetailsService.userDTOsListToUsersSet(shoppingListDTO.getParticipantsList()));
+        newShoppingList.setParticipantsList(participantsEntities);
+        }
         Shop shopToVerify = new Shop(shoppingListDTO.getShopName(), shoppingListDTO.getShopPromotionUrl());
         newShoppingList.setShop(shopService.addShopIfNotExists(shopToVerify));
 
@@ -132,6 +144,11 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         if (optionalShoppingList.isPresent()) {
             ShoppingList updatedShoppingList = optionalShoppingList.get();
             updatedShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
+            if (!shoppingListDTO.getParticipantsList().isEmpty()) {
+                List<User> participantsEntities =
+                        new ArrayList<>(userDetailsService.userDTOsListToUsersSet(shoppingListDTO.getParticipantsList()));
+                updatedShoppingList.setParticipantsList(participantsEntities);
+            } else updatedShoppingList.setParticipantsList(Collections.emptyList());
             return mapperService.shoppingListToDTO(shoppingListRepository.save(updatedShoppingList));
         } else
             throw new EntityExistsException(

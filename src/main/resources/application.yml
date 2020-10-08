@@ -1,3 +1,6 @@
+application:
+  name: '@project.artifactId@'
+
 spring:
   jpa:
     properties:
@@ -10,21 +13,19 @@ spring:
     url: jdbc:mysql://localhost:3306/list-app-db?serverTimezone=UTC
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   jackson:
     serialization:
       fail-on-empty-beans: false
+  profiles:
+    active: h2
 
 list-app:
   jwtSecret: secretKey
   jwtExpirationMs: 86400000
+
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        SQL: DEBUG
+        include: "*"

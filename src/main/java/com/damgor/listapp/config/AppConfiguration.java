@@ -1,6 +1,8 @@
 package com.damgor.listapp.config;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
+import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,5 +26,12 @@ public class AppConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+
+//    /actuator/httptrace -> requests and responses history
+    @Bean
+    public HttpTraceRepository htttpTraceRepository()
+    {
+        return new InMemoryHttpTraceRepository();
     }
 }

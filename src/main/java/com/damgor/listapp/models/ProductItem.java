@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 @Data
@@ -21,6 +22,7 @@ public class ProductItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Positive
     private Double quantity;
     @Enumerated(EnumType.STRING)
     private ProductUnit unit;
