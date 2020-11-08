@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://sql7.freemysqlhosting.net:3306/sql7370218?useUnicode=yes&characterEncoding=UTF-8
+    username: sql7370218
+    password: yle4l1CGja
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sqlScriptEncoding: UTF-8
