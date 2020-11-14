@@ -4,6 +4,7 @@ import com.damgor.listapp.models.DTOs.ProductItemDTO;
 import com.damgor.listapp.models.ProductItem;
 import com.damgor.listapp.repositories.ProductItemRepository;
 import com.damgor.listapp.security.services.UserDetailsServiceExt;
+import com.damgor.listapp.services.ImageService;
 import com.damgor.listapp.services.ProductItemService;
 import com.damgor.listapp.services.common.MapperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class ProductItemServiceImpl implements ProductItemService {
     private MapperService mapperService;
     @Autowired
     private UserDetailsServiceExt userDetailsService;
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public ProductItem addProductItem(ProductItem productItem) {
@@ -38,12 +41,8 @@ public class ProductItemServiceImpl implements ProductItemService {
     }
 
     @Override
-    public ProductItem updateProductItem(ProductItemDTO updatedProductItemDTO) {
-        return null;
-    }
-
-    @Override
     public void removeProductItem(Long productItemId) {
+        imageService.removeProductItemImage(productItemId);
         productItemRepository.deleteById(productItemId);
     }
 }

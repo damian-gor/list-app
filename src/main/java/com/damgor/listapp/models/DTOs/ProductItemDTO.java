@@ -20,5 +20,6 @@ public class ProductItemDTO {
     private UserDTO author;
     private ProductStatus productStatus = ProductStatus.IN_PROGRESS;
     private Long sourceProductId;
+    private boolean hasImage;
 
 }

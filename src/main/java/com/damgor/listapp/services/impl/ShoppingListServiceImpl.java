@@ -8,6 +8,7 @@ import com.damgor.listapp.models.ShoppingList;
 import com.damgor.listapp.models.User;
 import com.damgor.listapp.repositories.ShoppingListRepository;
 import com.damgor.listapp.security.services.UserDetailsServiceExt;
+import com.damgor.listapp.services.ImageService;
 import com.damgor.listapp.services.ProductItemService;
 import com.damgor.listapp.services.ShopService;
 import com.damgor.listapp.services.ShoppingListService;
@@ -31,10 +32,28 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     private UserDetailsServiceExt userDetailsService;
     @Autowired
     private MapperService mapperService;
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public ShoppingListDTO getShoppingList(Long id) {
-        return mapperService.shoppingListToDTO(shoppingListRepository.getOne(id));
+        ShoppingListDTO shoppingListDTO = mapperService.shoppingListToDTO(shoppingListRepository.getOne(id));
+        setHasImageFlagToListProductItems(shoppingListDTO);
+        return shoppingListDTO;
+    }
+
+    private void setHasImageFlagToListProductItems(ShoppingListDTO shoppingListDTO) {
+        List<ProductItemDTO> productItemDTOList = shoppingListDTO.getProductsList();
+        if (!productItemDTOList.isEmpty()) {
+            List<Long> productItemsIds = new ArrayList<>();
+            productItemDTOList.forEach(p -> productItemsIds.add(p.getId()));
+            List<Long> productItemsWithImagesIds = imageService.getIdsOfProductItemsWithImages(productItemsIds);
+            if (!productItemsWithImagesIds.isEmpty())
+                productItemDTOList.
+                        stream()
+                        .filter(productItemDTO -> productItemsWithImagesIds.contains(productItemDTO.getId()))
+                        .forEach(productItemDTO -> productItemDTO.setHasImage(true));
+        }
     }
 
     @Override
@@ -48,6 +67,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
             updatedShoppingList.setProductsList(updatedProductsList);
             updatedShoppingList = shoppingListRepository.save(updatedShoppingList);
             ShoppingListDTO updatedShoppingListDTO = mapperService.shoppingListToDTO(updatedShoppingList);
+            setHasImageFlagToListProductItems(updatedShoppingListDTO);
             return updatedShoppingListDTO;
         } else
             throw new EntityExistsException(
@@ -127,9 +147,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         newShoppingList.setBuyerId(userDetailsService.getUserDTO().getUserId());
         newShoppingList.setShop(shopService.getExistingShopByNameOrCreateNewOne(shoppingListDTO.getShopName()));
         if (!shoppingListDTO.getParticipantsList().isEmpty()) {
-        List<User> participantsEntities =
-                new ArrayList<>(userDetailsService.userDTOsListToUsersSet(shoppingListDTO.getParticipantsList()));
-        newShoppingList.setParticipantsList(participantsEntities);
+            List<User> participantsEntities =
+                    new ArrayList<>(userDetailsService.userDTOsListToUsersSet(shoppingListDTO.getParticipantsList()));
+            newShoppingList.setParticipantsList(participantsEntities);
         }
         Shop shopToVerify = new Shop(shoppingListDTO.getShopName(), shoppingListDTO.getShopPromotionUrl());
         newShoppingList.setShop(shopService.addShopIfNotExists(shopToVerify));
