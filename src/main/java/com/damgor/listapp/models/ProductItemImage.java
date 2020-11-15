@@ -18,6 +18,6 @@ public class ProductItemImage {
     private Long id;
     @NotNull
     private Long productItemId;
-    @Column(name = "picByte", length = 1000)
+    @Column(name = "picByte", columnDefinition="MEDIUMBLOB")
     private byte[] picByte;
 }
