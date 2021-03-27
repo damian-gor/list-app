@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://db4free.net:3306/listapp?useUnicode=yes&characterEncoding=UTF-8
+    username: rootlistapp
+    password: rootlistapp
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sqlScriptEncoding: UTF-8
